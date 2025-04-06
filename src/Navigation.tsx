@@ -1,6 +1,8 @@
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
+import { FiSearch } from "react-icons/fi";
+import { FaRegUser } from "react-icons/fa";
 
 function Navigation() {
   return (
@@ -12,8 +14,14 @@ function Navigation() {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav" className='navbar'>
           <Nav className="me-auto navbar">
-            <Nav.Link href="#search">Search</Nav.Link>
-            <Nav.Link href="#profile">Profile</Nav.Link>
+            <Nav.Link href="#search" className='me-2'>
+              <FiSearch className='top-react-icons me-2'/>
+              Search
+            </Nav.Link>
+            <Nav.Link href="#profile">
+              <FaRegUser className='top-react-icons me-2'/>
+              Profile
+            </Nav.Link>
           </Nav>
         </Navbar.Collapse>
       </Container>
