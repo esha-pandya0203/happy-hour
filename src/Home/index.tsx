@@ -20,7 +20,7 @@ export default function Home() {
                     <Card.Text>
                         Drink Ingredients
                     </Card.Text>
-                    <Button variant="primary">See Recipe</Button>
+                    <Button className="card-btn">See Recipe</Button>
                 </Card.Body>
             </Card>
 
