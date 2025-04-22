@@ -1,6 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
+import users from '../Database/users.json'; 
 
 const initialState = {
+  users: users,
   currentUser: null,
 };
 
@@ -14,8 +16,10 @@ const accountSlice = createSlice({
     clearCurrentUser: (state) => {
       state.currentUser = null;
     },
+    addUser: (state, action) => {
+      state.users = [...state.users, action.payload];
+    }
   },
 });
-
-export const { setCurrentUser, clearCurrentUser } = accountSlice.actions;
+export const { setCurrentUser, addUser, clearCurrentUser } = accountSlice.actions;
 export default accountSlice.reducer;
