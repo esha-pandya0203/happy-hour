@@ -47,7 +47,7 @@ export default function SignUp() {
                 onChange={(e) => setVerifyPassword(e.target.value)}
                 placeholder="verify-password" id="password" className="mb-2 w-25" />
 
-            <Form.Control defaultValue={1} type="number"
+            <Form.Control defaultValue="age" type="number"
                 onChange={(e) => setAge(e.target.value)}
                 placeholder="age" id="age" className="mb-2 w-25" />
 
@@ -55,7 +55,7 @@ export default function SignUp() {
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="email" id="email" className="mb-2 w-25" />
 
-            <Link to="/signup" className="btn btn-primary w-25 mb-2" onClick={signup}>Sign Up</Link> <br />
+            <Link to="/profile" className="btn btn-primary w-25 mb-2" onClick={signup}>Sign Up</Link> <br />
             <Link to="/signin" className="btn btn-primary w-25 mb-2" onClick={signup}>Sign In</Link>
         </div>
     )
