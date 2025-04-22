@@ -13,11 +13,11 @@ import Session from "./Account/Session"
 function App() {
 
   return (
-    <Session>
-      <div id="happy-hour">
-        <Navigation />
-        <HashRouter>
-          <Provider store={store}>
+    <Provider store={store}>
+      <Session>
+        <div id="happy-hour">
+          <Navigation />
+          <HashRouter>
             <Routes>
               <Route path="/" element={<Navigate to="/home" />} />
               <Route path="/home/*" element={<Home />} />
@@ -30,10 +30,10 @@ function App() {
               <Route path="/details" element={<h1>Post Search</h1>} />
               <Route path="/details/:drinkid" element={<h1>Individual Drink Details</h1>} />
             </Routes>
-          </Provider>
-        </HashRouter>
-      </div>
-    </Session>
+          </HashRouter>
+        </div>
+      </Session>
+    </Provider>
   )
 }
 
