@@ -20,9 +20,9 @@ function App() {
           <HashRouter>
             <Routes>
               <Route path="/" element={<Navigate to="/home" />} />
-              <Route path="/home/*" element={<Home />} />
+              <Route path="/home" element={<Home />} />
               <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
-              <Route path="/profile/:pid/*" element={<h1>Profile 2</h1>} />
+              <Route path="/profile/:pid" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
               <Route path="/signin" element={<SignIn />} />
               <Route path="/signup" element={<SignUp />} />
               <Route path="/search" element={<Search />} />

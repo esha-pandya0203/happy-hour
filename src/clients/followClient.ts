@@ -27,7 +27,7 @@ export const getFollowers = async (userId: string) => {
 }
 
 export const getFollowees = async (userId: string) => {
-    const response = await axiosWithCredentials.get(`${FOLLOWS_API}/followees/${userId}`); 
+    const response = await axiosWithCredentials.get(`${FOLLOWS_API}/following/${userId}`); 
     return response.data; 
 }
 

@@ -2,28 +2,54 @@ import { useEffect, useState } from "react";
 import { Button, Col, Form, Row, Tab, Tabs } from "react-bootstrap";
 import { MdOutlineModeEditOutline } from "react-icons/md";
 import { useSelector, useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams, Link } from "react-router-dom";
 import * as client from "../clients/accountClient";
+import * as followClient from "../clients/followClient";
 import { clearCurrentUser, setCurrentUser } from "./reducer";
 import DrinkCard from "../Details/DrinkCard";
 import { loadSavedDrinks } from "../utils/drinks";
 
 export default function Profile() {
+    const { pid } = useParams();
+
     const [profile, setProfile] = useState<any>({});
     const [savedDrinks, setSavedDrinks] = useState<any[]>([]);
     const [editMode, setEditMode] = useState<boolean>(false);
+    const [followers, setFollowers] = useState<any[]>([]);
+    const [followees, setFollowees] = useState<any[]>([]);
+
     const dispatch = useDispatch();
     const navigate = useNavigate();
+
     const { currentUser } = useSelector((state: any) => state.accountReducer);
 
-    const fetchProfile = async () => {
-        if (!currentUser) return navigate('/signin');
-        setProfile(currentUser);
+    const currentProfile = !pid || pid === currentUser?._id;
 
-        if (currentUser.savedDrinks?.length) {
-            const result = await loadSavedDrinks(currentUser.savedDrinks);
-            setSavedDrinks(result); 
+    const fetchProfile = async () => {
+        if (!pid && !currentUser) return navigate('/signin');
+
+        let userData;
+
+        if (currentProfile) {
+            userData = currentUser;
+        } else {
+            userData = await client.findUserById(pid);
         }
+
+        setProfile(userData);
+
+        if (userData?.savedDrinks?.length) {
+            const result = await loadSavedDrinks(userData.savedDrinks);
+            setSavedDrinks(result);
+        } else {
+            setSavedDrinks([]);
+        }
+
+        const followerResult = await followClient.getFollowers(userData._id);
+        const followeeResult = await followClient.getFollowees(userData._id);
+
+        setFollowees(followeeResult);
+        setFollowers(followerResult);
     };
 
     const signout = async () => {
@@ -35,20 +61,22 @@ export default function Profile() {
     const updateProfile = async () => {
         if (profile.age >= 21) {
             setProfile({ ...profile, role: "over21" });
+        } else {
+            setProfile({ ...profile, role: "under21" });
         }
         const updatedProfile = await client.updateUser(profile);
         dispatch(setCurrentUser(updatedProfile));
         setEditMode(false);
     };
 
-    useEffect(() => { fetchProfile(); }, []);
+    useEffect(() => { fetchProfile(); }, [pid]);
 
     return (
         <div className="profile">
             <h3>Profile: </h3>
             <Row>
                 <Col>
-                    {editMode ? (
+                    {editMode && currentProfile ? (
                         <>
                             <Form.Control className="mb-2 w-75" placeholder="username" defaultValue={profile.username}
                                 onChange={(e) => setProfile({ ...profile, username: e.target.value })} />
@@ -75,12 +103,13 @@ export default function Profile() {
                             <br />
                             <p><strong>Username:</strong> {profile.username}</p>
                             <p><strong>Role:</strong> {profile.role}</p>
-                            <p><strong>Email:</strong> {profile.email}</p>
+                            {currentProfile && <p><strong>Email:</strong> {profile.email}</p>}
 
-                            <Button>
-                                <MdOutlineModeEditOutline onClick={() => setEditMode(true)} className="me-2 transparent-icon" />
-                                Edit Profile
-                            </Button>
+                            {currentProfile &&
+                                <Button onClick={() => setEditMode(true)}>
+                                    <MdOutlineModeEditOutline className="me-2 transparent-icon" />
+                                    Edit Profile
+                                </Button>}
                         </>
                     )}
                 </Col>
@@ -91,10 +120,18 @@ export default function Profile() {
                         className="mb-3"
                     >
                         <Tab eventKey="following" title="Following">
-                            Insert list of usernames
+                            {followees.map((user: any) => (
+                                <p key={user._id}>
+                                    <Link to={`/profile/${user.followee_id._id}`}>{user.followee_id.username}</Link>
+                                </p>
+                            ))}
                         </Tab>
                         <Tab eventKey="followers" title="Followers">
-                            Insert list of usernames
+                            {followers.map((user: any) => (
+                                <p key={user._id}>
+                                    <Link to={`/profile/${user.follower_id._id}`}>{user.follower_id.username}</Link>
+                                </p>
+                            ))}
                         </Tab>
                     </Tabs>
                 </Col>
@@ -111,7 +148,9 @@ export default function Profile() {
                 })}
             </Row>
             <br />
-            <Button variant="danger" className="me-2" onClick={signout}>Sign Out</Button>
+            {currentProfile && (
+                <Button variant="danger" className="me-2" onClick={signout}>Sign Out</Button>
+            )}
         </div>
     )
 }
