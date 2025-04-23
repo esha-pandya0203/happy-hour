@@ -1,6 +1,4 @@
 import "../styles.css";
-import Button from 'react-bootstrap/Button';
-import Card from 'react-bootstrap/Card';
 import { BiDrink } from "react-icons/bi";
 import { IoMdStarOutline } from "react-icons/io";
 import { FaRegHeart } from "react-icons/fa";
