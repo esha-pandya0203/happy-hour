@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
-import { Button, Card, Col, Form, Row, Tab, Tabs } from "react-bootstrap";
-import { MdOutlineModeEdit } from "react-icons/md";
+import { Button, Col, Form, Row, Tab, Tabs } from "react-bootstrap";
+import { MdOutlineModeEditOutline } from "react-icons/md";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import * as client from "./client";
-import * as drinksClient from "../client";
+import * as client from "../clients/accountClient";
 import { clearCurrentUser, setCurrentUser } from "./reducer";
+import DrinkCard from "../Details/DrinkCard";
+import { loadSavedDrinks } from "../utils/drinks";
 
 export default function Profile() {
     const [profile, setProfile] = useState<any>({});
@@ -15,9 +16,14 @@ export default function Profile() {
     const navigate = useNavigate();
     const { currentUser } = useSelector((state: any) => state.accountReducer);
 
-    const fetchProfile = () => {
+    const fetchProfile = async () => {
         if (!currentUser) return navigate('/signin');
         setProfile(currentUser);
+
+        if (currentUser.savedDrinks?.length) {
+            const result = await loadSavedDrinks(currentUser.savedDrinks);
+            setSavedDrinks(result); 
+        }
     };
 
     const signout = async () => {
@@ -35,23 +41,7 @@ export default function Profile() {
         setEditMode(false);
     };
 
-    const loadSavedDrinks = async () => {
-        if (!profile.savedDrinks) return;
-
-        const drinkPromises = profile.savedDrinks.map((id: string) =>
-            drinksClient.fetchById(id).then((res) => res.drinks?.[0])
-        ); 
-        const drinks = await Promise.all(drinkPromises); 
-        setSavedDrinks(drinks.filter(Boolean)); 
-    }; 
-
     useEffect(() => { fetchProfile(); }, []);
-
-    useEffect(() => {
-        if (profile.savedDrinks?.length) {
-            loadSavedDrinks(); 
-        }
-    }, [profile]); 
 
     return (
         <div className="profile">
@@ -87,9 +77,10 @@ export default function Profile() {
                             <p><strong>Role:</strong> {profile.role}</p>
                             <p><strong>Email:</strong> {profile.email}</p>
 
-                            <MdOutlineModeEdit onClick={() => setEditMode(true)} className="me-2" />
-                            <p>Edit Profile</p>
-                            <Button variant="danger" className="me-2" onClick={signout}>Sign Out</Button>
+                            <Button>
+                                <MdOutlineModeEditOutline onClick={() => setEditMode(true)} className="me-2 transparent-icon" />
+                                Edit Profile
+                            </Button>
                         </>
                     )}
                 </Col>
@@ -108,31 +99,19 @@ export default function Profile() {
                     </Tabs>
                 </Col>
             </Row>
+            <br />
             <Row>
                 <h2>Saved Drinks:</h2>
                 {savedDrinks.map((drink, index: number) => {
                     return (
-                        <Col key={index}>
-                            <Card style={{ width: '18rem' }}>
-                                <Card.Img variant="top" src={drink.strDrinkThumb} />
-                                <Card.Body>
-                                    <Card.Title>{drink.strDrink}</Card.Title>
-                                    <Card.Text>
-                                        {Array.from({ length: 15 }).map((_, i) => {
-                                            const ingredient = drink[`strIngredient${i+1}`]; 
-                                            const measure = drink[`strMeasure${i+1}`]; 
-                                            return ingredient ? (
-                                                <div key={i}>{measure || ''} {ingredient}</div>
-                                            ) : null; 
-                                        })}
-                                    </Card.Text>
-                                    <Button variant="primary">See Recipe</Button>
-                                </Card.Body>
-                            </Card>
+                        <Col key={index} className="col-2">
+                            <DrinkCard drink={drink} onClick={() => navigate(`/drinks/${drink.idDrink}`)} page="profile" />
                         </Col>
                     )
                 })}
             </Row>
+            <br />
+            <Button variant="danger" className="me-2" onClick={signout}>Sign Out</Button>
         </div>
     )
 }
