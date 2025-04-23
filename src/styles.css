@@ -37,8 +37,8 @@
 }
 
 #happy-hour {
-  padding-top: 200px; 
-  padding-left: 20px; 
+  padding-top: 200px;
+  padding-left: 20px;
 }
 
 .navbar {
@@ -53,10 +53,41 @@
 
 .btn.btn-primary {
   background-color: #5A464C;
-  border-color: #5A464C; 
+  border-color: #5A464C;
 }
 
 .btn.btn-primary:hover {
   background-color: #53131E;
   border-color: #53131E;
+}
+
+.btn.btn-danger {
+  background-color: #53131E;
+  border-color: #53131E;
+}
+
+.btn.btn-danger:hover {
+  background-color: #5A464C;
+  border-color: #5A464C;
+}
+
+.transparent-icon {
+  background-color: transparent;
+  fill: white;
+}
+
+.saved-drinks-card-profile {
+  min-width: 12rem;
+  min-height: 25rem;
+  max-width: 12rem;
+  max-height: 25rem;
+  overflow: hidden;
+}
+
+.saved-drinks-card-home {
+  min-width: 15rem;
+  min-height: 30rem;
+  max-width: 15rem;
+  max-height: 30rem;
+  overflow: hidden;
 }

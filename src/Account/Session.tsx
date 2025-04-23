@@ -1,4 +1,4 @@
-import * as client from "./client";
+import * as client from "../clients/accountClient";
 import { useEffect, useState } from "react";
 import { setCurrentUser } from "./reducer";
 import { useDispatch } from "react-redux";

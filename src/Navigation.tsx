@@ -4,8 +4,11 @@ import Navbar from 'react-bootstrap/Navbar';
 import { FiSearch } from "react-icons/fi";
 import { FaRegUser } from "react-icons/fa";
 import { NavDropdown } from 'react-bootstrap';
+import { useSelector } from 'react-redux';
 
 export default function Navigation() {
+
+  const { currentUser } = useSelector((state: any) => state.accountReducer);
 
   return (
     <Navbar fixed="top" expand="lg" className="navbar">
@@ -20,16 +23,20 @@ export default function Navigation() {
               <FiSearch className='top-react-icons me-2' />
               Search
             </Nav.Link>
-            <FaRegUser className='top-react-icons me-2' />
-            <NavDropdown title="Account" className='top-react-icons'>
-              <NavDropdown.Item href='#signin'>Sign In</NavDropdown.Item>
-              <NavDropdown.Item href='#signup'>Sign Up</NavDropdown.Item>
-              <NavDropdown.Item href='#profile'>Profile</NavDropdown.Item>
-            </NavDropdown>
-            {/* <Nav.Link href="#profile">
-              <FaRegUser className='top-react-icons me-2' />
-              Profile
-            </Nav.Link> */}
+            {currentUser ? (
+              <Nav.Link href="#profile">
+                <FaRegUser className='top-react-icons me-2' />
+                Profile
+              </Nav.Link>
+            ) :
+              <>
+                <FaRegUser className='top-react-icons me-2' />
+                <NavDropdown title="Account" className='top-react-icons'>
+                  <NavDropdown.Item href='#signin'>Sign In</NavDropdown.Item>
+                  <NavDropdown.Item href='#signup'>Sign Up</NavDropdown.Item>
+                </NavDropdown>
+              </>
+            }
           </Nav>
         </Navbar.Collapse>
       </Container>
