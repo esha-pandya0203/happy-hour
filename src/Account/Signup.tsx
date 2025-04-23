@@ -16,6 +16,8 @@ export default function SignUp() {
         if (user.password === verifyPassword) {
             if (user.age >= 21) {
                 setUser({ ...user, role: "over21" });
+            } else {
+                setUser({ ...user, role: "under21"}); 
             }
             const currentUser = await client.signup(user);
             dispatch(setCurrentUser(currentUser));

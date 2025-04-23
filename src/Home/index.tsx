@@ -65,7 +65,7 @@ export default function Home() {
 
             <h4>
                 <IoMdStarOutline className="home-react-icons me-2" />
-                Popular Drinks (if user is not logged in)
+                Popular Drinks
             </h4>
             <Row>
                 {popularDrinks.map((drink) => (
