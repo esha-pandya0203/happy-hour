@@ -10,6 +10,7 @@ import store from "./store"
 import ProtectedRoute from "./Account/ProtectedRoute"
 import Session from "./Account/Session"
 import Footer from "./Footer"
+import IndividualDrink from "./Details/IndividualDrink"
 
 function App() {
 
@@ -29,7 +30,7 @@ function App() {
               <Route path="/search" element={<Search />} />
               <Route path="/search/:criteria" element={<h1>Post Search</h1>} />
               <Route path="/details" element={<h1>Post Search</h1>} />
-              <Route path="/details/:drinkid" element={<h1>Individual Drink Details</h1>} />
+              <Route path="/drinks/:drinkId" element={<IndividualDrink />} />
             </Routes>
           </HashRouter>
           <Footer />
