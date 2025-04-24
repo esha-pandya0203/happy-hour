@@ -9,12 +9,13 @@ import { useSelector } from 'react-redux';
 export default function Navigation() {
 
   const { currentUser } = useSelector((state: any) => state.accountReducer);
+  const under21 = currentUser ? currentUser.role == "under21" : false;
 
   return (
     <Navbar fixed="top" expand="lg" className="navbar">
       <Container className='navbar'>
         <Navbar.Brand href="#home" className='navbar py-0'>
-          <img src="/images/happy-hour-logo.png" width='150' height='150' className='d-inline-block align-top' alt='Happy Hour Logo' />
+          <img src={under21 ? "/images/not-happy-hour-logo.png" : "/images/happy-hour-logo.png"} width='150' height='150' className='d-inline-block align-top' alt='Happy Hour Logo' />
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav" className='navbar'>

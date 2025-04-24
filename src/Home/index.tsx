@@ -15,7 +15,7 @@ export default function Home() {
     const [savedDrinks, setSavedDrinks] = useState<any[]>([]);
     const [randomDrink, setRandomDrink] = useState<any>();
     const [popularDrinks, setPopularDrinks] = useState<any[]>([]);
-    const under21 = currentUser ? currentUser.role == "under21" : true;
+    const under21 = currentUser ? currentUser.role == "under21" : false;
     const [nonAlcoholic, setNonAlcholic] = useState<any>();
     const navigate = useNavigate();
 
