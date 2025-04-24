@@ -15,6 +15,8 @@ export default function Home() {
     const [savedDrinks, setSavedDrinks] = useState<any[]>([]);
     const [randomDrink, setRandomDrink] = useState<any>();
     const [popularDrinks, setPopularDrinks] = useState<any[]>([]);
+    const under21 = currentUser ? currentUser.role == "under21" : false;
+    const [nonAlcoholic, setNonAlcholic] = useState<any>();
     const navigate = useNavigate();
 
     const fetchSavedDrinks = async () => {
@@ -29,12 +31,30 @@ export default function Home() {
         setRandomDrink(result.drinks[0]);
     }
 
+    const fetchNonAlcoholicDrink = async () => {
+        const result = await drinksClient.fetchByCocktailName("Spanish chocolate");
+        setNonAlcholic(result.drinks[0]);
+    }
+
     const generatePopularDrinks = async () => {
         const drinks: any[] = [];
 
-        for (let i = 0; i < 5; i++) {
-            const result = await drinksClient.fetchRandomCocktail();
+        if (under21) {
+            let result = await drinksClient.fetchByCocktailName("Afterglow");
             drinks.push(result.drinks[0]);
+            result = await drinksClient.fetchByCocktailName("Frappé");
+            drinks.push(result.drinks[0]);
+            result = await drinksClient.fetchByCocktailName("Lassi - Mango");
+            drinks.push(result.drinks[0]);
+            result = await drinksClient.fetchByCocktailName("Limeade");
+            drinks.push(result.drinks[0]);
+            result = await drinksClient.fetchByCocktailName("Strawberry Shivers");
+            drinks.push(result.drinks[0]);
+        } else {
+            for (let i = 0; i < 5; i++) {
+                let result = await drinksClient.fetchRandomCocktail();
+                drinks.push(result.drinks[0]);
+            }
         }
 
         setPopularDrinks(drinks);
@@ -44,6 +64,7 @@ export default function Home() {
     useEffect(() => {
         fetchSavedDrinks();
         fetchRandomDrink();
+        fetchNonAlcoholicDrink();
         generatePopularDrinks(); 
     }, []);
 
@@ -57,7 +78,7 @@ export default function Home() {
                         <BiDrink className="home-react-icons me-2" />
                         Drink of the Hour
                     </h4>
-                    <DrinkCard drink={randomDrink} onClick={() => navigate(`/drinks/${randomDrink.idDrink}`)} page="home" />
+                    <DrinkCard drink={under21 ? nonAlcoholic : randomDrink} onClick={() => navigate(`/drinks/${randomDrink.idDrink}`)} page="home" />
                 </>
             )}
 

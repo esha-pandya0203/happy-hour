@@ -17,7 +17,7 @@ export const fetchByCocktailName = async (cocktail: any) => {
 };
 
 export const fetchByIngredientName = async (ingredient: any) => {
-  const response = await axios.get(`${SEARCH_API}i=${ingredient}`);
+  const response = await axios.get(`https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=${ingredient}`);
   return response.data;
 };
 
