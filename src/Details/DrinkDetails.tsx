@@ -1,7 +1,16 @@
+import { useState } from "react";
+import { Button } from "react-bootstrap";
+import { FaHeart, FaRegHeart } from "react-icons/fa6";
+
 const DrinkDetails = ({ drink }: { drink: any }) => {
+    const [likeDrink, setLikeDrink] = useState<boolean>(false);
+
   return (
     <div>
-        <h2>{drink.strDrink} ({drink.strAlcoholic})</h2>
+        <h2>
+            {drink.strDrink} ({drink.strAlcoholic})
+            {likeDrink ? <Button onClick={() => setLikeDrink(false)}><FaRegHeart /></Button> : <Button onClick={() => setLikeDrink(true)}><FaHeart /></Button>}
+        </h2>
         <img src={`${drink.strDrinkThumb}/small`} /><hr />
         <p>
             <b>{drink.strIBA}</b>
