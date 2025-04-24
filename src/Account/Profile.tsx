@@ -8,6 +8,7 @@ import * as followClient from "../clients/followClient";
 import { clearCurrentUser, setCurrentUser } from "./reducer";
 import DrinkCard from "../Details/DrinkCard";
 import { loadSavedDrinks } from "../utils/drinks";
+import { RiUserFollowFill, RiUserUnfollowFill } from "react-icons/ri";
 
 export default function Profile() {
     const { pid } = useParams();
@@ -24,6 +25,7 @@ export default function Profile() {
     const { currentUser } = useSelector((state: any) => state.accountReducer);
 
     const currentProfile = !pid || pid === currentUser?._id;
+    const currentIsFollowing = !currentProfile && !followers.find(currentUser);
 
     const fetchProfile = async () => {
         if (!pid && !currentUser) return navigate('/signin');
@@ -105,11 +107,19 @@ export default function Profile() {
                             <p><strong>Role:</strong> {profile.role}</p>
                             {currentProfile && <p><strong>Email:</strong> {profile.email}</p>}
 
-                            {currentProfile &&
+                            {currentProfile ?
                                 <Button onClick={() => setEditMode(true)}>
                                     <MdOutlineModeEditOutline className="me-2 transparent-icon" />
                                     Edit Profile
-                                </Button>}
+                                </Button> :
+                                currentIsFollowing ? <Button onClick={() => followClient.unfollowUser(currentUser?._id, pid)}>
+                                                        <RiUserUnfollowFill />
+                                                        Unfollow
+                                                     </Button>
+                                                   : <Button onClick={() => followClient.followUser(currentUser?._id, pid)}>
+                                                        <RiUserFollowFill />
+                                                        Follow
+                                                     </Button>}
                         </>
                     )}
                 </Col>
