@@ -46,6 +46,18 @@
   font-size: 20px;
 }
 
+.footer {
+  background-color: #5A464C;
+  font-size: 20px;
+  color: #FEFCEC;
+}
+
+.footer-link {
+  background-color: #5A464C;
+  font-size: 20px;
+  color: #FEFCEC;
+}
+
 .top-react-icons {
   background-color: #A0CED9;
   size: sm;
