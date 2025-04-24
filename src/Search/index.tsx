@@ -4,24 +4,28 @@ import { HiMagnifyingGlass } from "react-icons/hi2";
 import { useNavigate } from "react-router-dom";
 import * as drinksClient from "../clients/drinkClient";
 import DrinkCard from "../Details/DrinkCard";
+import { useSelector } from "react-redux";
 
 export default function Search() {
-    // const { currentUser } = useSelector((state: any) => state.accountReducer);
+    const { currentUser } = useSelector((state: any) => state.accountReducer);
     const [searchDrinks, setSearchDrinks] = useState<any[]>([]);
     const [searchValue, setSearchValue] = useState<any>();
     const navigate = useNavigate();
+    const under21 = currentUser ? currentUser.role == "under21" : false;
 
     const fetchByCocktailName = async (cocktail: any) => {
-        console.log()
         const result = await drinksClient.fetchByCocktailName(cocktail);
+        const drinks = result.drinks;
+        if (under21) {
+            drinks.filter((drink: any) => drink.strAlcoholic === "Non alcoholic")
+        }
         setSearchDrinks(result.drinks);
     }
 
-    // const fetchIngredient = async (ingredient: any) => {
-    //     console.log(ingredient)
-    //     const result = await drinksClient.fetchByIngredientName(ingredient);
-    //     setSearchDrinks(result.ingredients);
-    // }
+    const fetchByIngredient = async (ingredient: any) => {
+        const result = await drinksClient.fetchByIngredientName(ingredient);
+        setSearchDrinks(result.drinks);
+    }
 
     return (
         <div className="search">
@@ -31,9 +35,9 @@ export default function Search() {
                     <HiMagnifyingGlass />
                 </InputGroup.Text>
                 <Form.Control type="text" placeholder="Search..." 
-                              onChange={(e) => {setSearchValue(e.target.value); console.log(searchValue)}}/>
-                <Button onClick={() => (fetchByCocktailName(searchValue))} variant="primary">Search Cocktails</Button>
-                {/* <Button onClick={() => (fetchIngredient(searchValue))} variant="secondary">By Ingredient</Button> */}
+                              onChange={(e) => {setSearchValue(e.target.value)}}/>
+                <Button onClick={() => (fetchByCocktailName(searchValue))} variant="secondary">Search Cocktails</Button>
+                <Button onClick={() => (fetchByIngredient(searchValue))} variant="primary">Search Ingredient</Button>
             </InputGroup>
             <br /><br /><hr />
             <Row>

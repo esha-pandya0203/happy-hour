@@ -21,6 +21,11 @@ export const fetchByIngredientName = async (ingredient: any) => {
   return response.data;
 };
 
+export const fetchNonAlcoholic = async () => {
+  const response = await axios.get("www.thecocktaildb.com/api/json/v1/1/filter.php?a=Non_Alcoholic");
+  return response.data;
+}
+
 export const fetchByFirstLetter = async (search: any) => {
   const response = await axios.get(`${SEARCH_API}f=${search.charAt(0)}`);
   return response.data;
