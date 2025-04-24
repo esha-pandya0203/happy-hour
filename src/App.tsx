@@ -9,6 +9,7 @@ import { Provider } from "react-redux"
 import store from "./store"
 import ProtectedRoute from "./Account/ProtectedRoute"
 import Session from "./Account/Session"
+import Footer from "./Footer"
 
 function App() {
 
@@ -31,6 +32,7 @@ function App() {
               <Route path="/details/:drinkid" element={<h1>Individual Drink Details</h1>} />
             </Routes>
           </HashRouter>
+          <Footer />
         </div>
       </Session>
     </Provider>
